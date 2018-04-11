@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.ForSeekerDao.ForSeekerMapper">
+    <select id="selectCR" resultType="HxCompanyRecruit">
+        SELECT * FROM hx_company_recruit hc
+        INNER JOIN hx_area ha ON (hc.areaid=ha.id)
+       <where>
+           <if test="kd!=null">
+               position LIKE CONCAT('%',#{kd},'%')
+           </if>
+       </where>
+    </select>
+
+    <select id="selectCRA" resultType="HxCompanyRecruit">
+        SELECT * FROM hx_company_recruit hc
+        INNER JOIN hx_area ha ON (hc.areaid=ha.id)
+        <where>
+            <if test="xuanze!=null">
+                position LIKE CONCAT('%',#{xuanze},'%')
+            </if>
+        </where>
+    </select>
+    <select id="selectSeekerInfo" resultType="HxSeeker">
+        SELECT * FROM hx_seeker
+        WHERE seekerid=#{id}
+    </select>
+
+    <!--<update id="datea" parameterType="HxSeeker">
+        UPDATE hx_seeker SET seekername=#{resumeName}
+        WHERE seekerid=#{id}
+    </update>-->
+
+    <update id="dateb" parameterType="HxSeeker">
+        UPDATE hx_seeker
+        SET seekerphone=#{tel},seekeremail=#{email},seekername=#{names}
+        WHERE seekerid=#{id}
+    </update>
+
+    <insert id="insertA">
+        INSERT INTO hx_resume(seekerid,name,sexid,age,email,oftenuse)
+        VALUES(#{seekerid},#{name},#{newSex},#{age},#{email},#{newOftenuse});
+    </insert>
+
+    <update id="insertB" parameterType="HxResume">
+        UPDATE hx_resume
+        SET educationid=#{xueLi},workexperience=#{jinyan},country=#{guoji},language=#{langele}
+        WHERE seekerid= #{seekerid}
+    </update>
+
+    <update id="insertC" parameterType="HxResume">
+        UPDATE hx_resume
+        SET wantedindustry=#{zhiwei},wantedplaceid=#{newAddress},wantedpay=#{xinzi}
+        WHERE seekerid= #{seekerid}
+    </update>
+
+    <update id="insertD" parameterType="HxResume">
+        UPDATE hx_resume
+        SET skill=#{jineng},introduce=#{miaoshu}
+        WHERE seekerid= #{seekerid}
+    </update>
+
+    <select id="lookSKcoll" resultType="HxCollection">
+    SELECT companyid FROM hx_collection WHERE seekerid = #{seekerid}
+    </select>
+
+    <select id="infocom" resultType="HxCompany">
+       SELECT * FROM hx_company WHERE companyid = #{companyid}
+    </select>
+
+    <select id="lookAddress" resultType="int">
+        SELECT id FROM hx_area WHERE name LIKE CONCAT('%',#{addressA},'%')
+    </select>
+
+    <select id="getCountPage" resultType="int">
+        SELECT COUNT(*) FROM hx_company_recruit
+        <where>
+            <if test="zhiwei!=null and zhiwei.length()!=0">
+                AND position LIKE ('%',#{zhiwei},'%')
+            </if>
+            <if test="zhiwei!=null and zhiwei>0">
+                AND position = #{zhiwei}
+            </if>
+        </where>
+    </select>
+
+    <select id="pageLook" resultType="HxCompanyRecruit">
+        SELECT * FROM hx_company_recruit hc
+        INNER JOIN hx_area ha ON (hc.areaid=ha.id)
+        <where>
+            <if test="zhiwei != null">
+                 position LIKE CONCAT('%',#{zhiwei},'%')
+            </if>
+            <if test="xinzi != null">
+                AND pay = #{xinzi}
+            </if>
+            <if test="xueli != null">
+                AND educationid =#{xueli}
+            </if>
+            <if test="time != null">
+                AND publishtime LIKE CONCAT('%',#{time},'%')
+            </if>
+        </where>
+        LIMIT #{ipageNo},#{pageSize}
+    </select>
+
+    <delete id="delColl" >
+         DELETE FROM hx_collection WHERE companyid=#{id}
+    </delete>
+</mapper>

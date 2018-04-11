@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="dao.MyResume.MyResumeMapper" >
+    <select id="showBySeekerId" resultType="HxResume">
+        select * from hx_resume
+          <where>
+              <if test="seekerid != 0">
+                  seekerid = #{seekerid}
+              </if>
+          </where>
+        LIMIT #{pageindex},#{pageSize}
+    </select>
+
+    <select id="getAllCount" resultType="int">
+        select count(*) from hx_resume
+        <where>
+            <if test="seekerid != 0">
+                seekerid = #{seekerid}
+            </if>
+        </where>
+    </select>
+
+    <delete id="DeByResumeid">
+        delete from hx_resume
+          <where>
+              <if test="resumeid != null">
+                  resumeid = #{resumeid}
+              </if>
+          </where>
+    </delete>
+</mapper>

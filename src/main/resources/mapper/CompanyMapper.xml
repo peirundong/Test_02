@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.CompanyDao.CompanyMapper">
+    <select id="getCompanyLogin" resultType="HxCompany">
+            select * from hx_company
+             <where>
+                 companyaccount=#{companyaccount}
+             </where>
+    </select>
+    <insert id="addCompany" parameterType="HxCompany" >
+        INSERT INTO `hx_company` (
+         `companyname`,companyaccount, `companyphone`,
+         `companyemail`,  `companypwd`, `companyinformation`,typevalueid)
+         VALUES
+         (
+        #{companyname},#{companyaccount},#{companyphone} , #{companyemail},
+         #{companypwd}, #{companyinformation},
+        #{typevalueid})
+    </insert>
+    <select id="selectAllRecruitByCompanyAccount" resultType="HxCompanyRecruit" >
+        SELECT * FROM huixian.hx_company_recruit r inner join hx_area a on r.areaid=a.id inner join hx_industry i on r.industryid=i.id
+
+        where companyid=#{Companyid}
+        <if test="cat3!=null and cat3!=''">
+            and a.id=#{cat3}
+        </if>
+        <if test="cat5!=null and cat5!=''">
+            and i.id=#{cat5}
+        </if>
+    </select>
+    <select id="selectCountByCompanyAccount" resultType="java.lang.Integer">
+        select COUNT(*)
+        from
+        hx_company c,hx_company_recruit r,hx_dictionary d
+        WHERE
+        c.companyid=r.companyid AND r.statusid=d.typevalueid AND d.typename='审核状态' and c.companyaccount=#{companyaccount}
+
+    </select>
+    <select id="getlist" resultType="HxArea">
+       SELECT id,`name` from hx_area where parentId=#{id}
+    </select>
+    <select id="getIndustry" resultType="HxIndustry">
+        select * from hx_industry where parentno=#{parentno}
+    </select>
+    <select id="selectPhone" resultType="HxCompany">
+        SELECT COUNT(*) FROM hx_company  where companyphone=#{companyphone}
+    </select>
+</mapper>

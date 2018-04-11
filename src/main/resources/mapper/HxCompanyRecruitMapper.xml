@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.HxCompanyRecruitDao.HxCompanyRecruitMapper">
+
+    <insert id="AddhxCompanyRecruit" parameterType="HxCompanyRecruit">
+         INSERT INTO `hx_company_recruit`
+        (`companyid`, `statusid`, `position`, `salaryMax`, `salaryMin`, `educationid`,
+         `positiondesc`, `needs`,`publishtime`, `endtime`, `areaid`, `detaddress`)
+        VALUES (#{companyid},#{statusid},#{position},#{salaryMax},#{salaryMin},#{educationid},
+         #{positiondesc},#{needs},#{publishtime},#{endtime},#{areaid},#{detaddress})
+    </insert>
+    <select id="getcompanyid" resultType="HxCompanyRecruit">
+        SELECT * FROM huixian.hx_company_recruit where recruitid=#{recruitid}
+    </select>
+    <!--查询所有未通过的招聘信息-->
+    <select id="showAllFailInfo" resultType="HxCompanyRecruit">
+        select recruitid,companyid,position,salaryMax,salaryMin,d.valuename,positiondesc,needs,publishtime,endtime,statusid
+        from hx_company_recruit c
+        INNER JOIN hx_dictionary d ON c.educationid=d.typevalueid
+        <where>
+            d.typename='学历' and c.companyid=#{comanyid} and c.statusid=#{valuename}
+        </where>
+        LIMIT #{pageindex},#{pageSize}
+    </select>
+    <!--查询所有未通过的招聘信息的行数-->
+    <select id="getAllFailInfoCount" resultType="int">
+        select COUNT(*) from hx_company_recruit c
+        INNER JOIN hx_dictionary d ON c.educationid=d.typevalueid
+        <where>
+            d.typename='学历' and c.companyid=#{comanyid} and c.statusid=#{valuename}
+        </where>
+    </select>
+    <!--单条删除未通过审核的招聘信息-->
+    <delete id="delAFailedJobById" parameterType="int">
+        DELETE FROM hx_company_recruit
+        <where>
+            recruitid=#{recruitid}
+        </where>
+    </delete>
+    <!--单条删除已通过审核的招聘信息-->
+    <delete id="delASuccessedJobById" parameterType="int">
+        DELETE FROM hx_company_recruit
+        <where>
+            recruitid=#{recruitid}
+        </where>
+    </delete>
+</mapper>

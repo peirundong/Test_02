@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.SeekerDao.SeekerMapper">
+    <select id="getSeekerLogin" resultType="HxSeeker">
+            select * from hx_seeker
+             <where>
+                 seekerphone=#{seekerphone}
+             </where>
+    </select>
+    <insert id="addSeeker" parameterType="HxSeeker">
+        INSERT INTO `hx_seeker` (`seekerphone`, `seekerpwd`, `seeksalt`,
+         `seekeremail`, `seekername`, `seekerregtime`)
+        VALUES (#{seekerphone}, #{seekerpwd},#{seeksalt},
+         #{seekeremail}, #{seekername}, #{seekerregtime})
+    </insert>
+    <!--<select id="selectCompanyRecruitByCompanyId" >-->
+          <!--select * from hx_company_recruit r,hx_company c-->
+           <!--<where>-->
+               <!--r.companyid=c.companyid and c.companyid=#{companyid}-->
+           <!--</where>-->
+    <!--</select>-->
+    <!--<select id="getSeekerLogin" resultType="int">-->
+        <!--select count(*) from hx_seeker-->
+        <!--<where>-->
+            <!--seekerphone=#{phone}-->
+        <!--</where>-->
+    <!--</select>-->
+</mapper>

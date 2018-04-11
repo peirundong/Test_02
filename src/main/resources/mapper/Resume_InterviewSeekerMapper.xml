@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="dao.Resume_InterviewSeekerMapper.Resume_InterviewSeekerMapper" >
+    <select id="showBySeekerIdAndStatusid" resultType="HxResume">
+        select rom.companyid ,re.*,cy.companyname from hx_resume_of_company rom , hx_resume re ,hx_company cy
+          <where>
+              <if test="seekerid != 0">
+                  seekerid = #{seekerid}
+              </if>
+              <if test="statusid != 3">
+                  and  statusid = #{statusid}
+              </if>
+          </where>
+        and rom.resumeid = re.resumeid
+        and rom.companyid =cy.companyid
+        LIMIT #{pageindex},#{pageSize}
+    </select>
+
+    <select id="getAllCount" resultType="int">
+        select count(*) from hx_resume_of_company rom , hx_resume re ,hx_company cy
+        <where>
+            <if test="seekerid != 0">
+                seekerid = #{seekerid}
+            </if>
+            <if test="statusid != 0">
+                and  statusid = #{statusid}
+            </if>
+        </where>
+        and rom.resumeid = re.resumeid
+        and rom.companyid =cy.companyid
+    </select>
+</mapper>

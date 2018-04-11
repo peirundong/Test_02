@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.ResumeNotificationDao.ResumeNotificationMapper" >
+    <!--查询所有投递反馈信息,按用户id查询-->
+    <select id="showAllResumeNotificationInfo" resultType="HxResumeNotification">
+        SELECT c.companyname,cor.position,cor.salaryMax,cor.salaryMin,a.name,r.seekerid,d.valuename FROM hx_resume r
+        INNER JOIN hx_resume_of_company roc ON roc.resumeid=r.resumeid
+        INNER JOIN hx_company c ON roc.companyid=c.companyid
+        INNER JOIN hx_company_recruit cor ON cor.companyid=c.companyid
+        INNER JOIN hx_area a ON c.addressid=a.id
+        INNER JOIN hx_dictionary d ON r.statusid=d.typevalueid
+        <where>
+            typename='审核状态' AND r.seekerid=#{seekerid}
+        </where>
+    </select>
+</mapper>

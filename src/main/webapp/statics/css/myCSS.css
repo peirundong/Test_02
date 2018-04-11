@@ -1,0 +1,13 @@
+li{
+    list-style: none;
+    float: left;
+    padding: 0 30px;
+}
+.myNav{
+    height: 50px;
+    line-height: 50px;
+    background: #000033;
+}
+.myNav a{
+    color: #f0f5f6;
+}

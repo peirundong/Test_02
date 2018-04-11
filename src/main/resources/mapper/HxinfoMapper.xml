@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="dao.HxInfoDao.HxInfoMapper" >
+    <select id="getRecruitbyId" resultType="Hxinfo">
+        SELECT * from
+        hx_company_recruit r,hx_company c,hx_area a,hx_dictionary d
+        <where>
+            recruitid=#{recruitid} AND c.companyid=r.companyid and c.addressid=a.id and r.educationid=d.typevalueid  and d.typename='学历'
+        </where>
+    </select>
+
+    <select id="getCompanybyId" resultType="Hxinfo">
+        SELECT c.companyaccount,c.companyname,c.companyphone,c.companyemail,c.companyinformation,c.companyregtime,c.companylicenseurl,a.merger_name
+        from hx_company c,hx_area a
+        <where>
+            companyid=#{companyid} and a.id=c.addressid
+        </where>
+    </select>
+</mapper>

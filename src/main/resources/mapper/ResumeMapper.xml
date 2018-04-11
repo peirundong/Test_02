@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="dao.ResumeDao.ResumeMapper" >
+    <select id="show" resultType="HxResume">
+        select * from hx_resume r,hx_resume_of_company y
+        <where>
+            <if test="companyid != null">
+                y.companyid=#{companyid}
+            </if>
+        </where>
+        and y.resumeid=r.resumeid and r.statusid=1
+    </select>
+    <select id="showBy" resultType="HxResume">
+        select * from hx_resume r,hx_resume_of_company y
+        <where>
+            <if test="companyid != null">
+                y.companyid=#{companyid}
+            </if>
+        </where>
+        and y.staid=1 and y.resumeid=r.resumeid and r.statusid=1
+    </select>
+    <select id="getresumeid" resultType="HxResume">
+        SELECT * FROM huixian.hx_resume where seekerid=#{seekerid}
+    </select>
+    <select id="getAllResume" resultType="HxResume">
+        select * from hx_resume limit 0,5
+        <!--<where>-->
+        <!--<if test="parentId != null">-->
+        <!--and parentId = #{parentId}-->
+        <!--</if>-->
+        <!--<if test="parentId == null">-->
+        <!--and parentId is null-->
+        <!--</if>-->
+        <!--</where>-->
+    </select>
+    <select id="getAllBy" resultType="HxResume">
+        select * from hx_resume h
+        <where>
+            <if test="workexperience != null and workexperience != ''">
+                <if test="workexperience == 1">
+                    and workexperience = 0
+                    and educationid >= 2
+                </if>
+                <if test="workexperience == 2">
+                    and workexperience between 1 and 3
+                </if>
+                <if test="workexperience == 3">
+                    and workexperience between 3 and 5
+                </if>
+                <if test="workexperience == 4">
+                    and workexperience between 5 and 10
+                </if>
+                <if test="workexperience == 5">
+                    and workexperience >10
+                </if>
+            </if>
+            <if test="educationid != 0">
+                <if test="workexperience != 1">
+                    and educationid = #{educationid}
+                </if>
+            </if>
+            <if test="statusid !=null">
+                and statusid=#{statusid}
+            </if>
+            AND h.resumeid not in(SELECT resumeid FROM huixian.hx_company_recruit r inner join hx_resume_of_company c
+            on r.companyid=c.companyid
+            where c.companyid=#{getCompanyid})
+        </where>
+        limit 0,5
+    </select>
+    <select id="getAllById" resultType="HxResume">
+        SELECT s.seekername,r.sexid,r.wantedindustry,r.workexperience,r.wantedpay,d.valuename,r.oftenuse,r.country,a.merger_name,r.email,r.`language`,r.age,r.introduce,r.skill,r.remarks
+        FROM hx_resume r,hx_seeker s,hx_dictionary d,hx_area a
+        <where>
+            resumeid=#{statusid} AND r.seekerid=s.seekerid AND r.educationid=d.typevalueid AND a.zip_code=r.wantedplaceid AND d.typename="学历"
+        </where>
+    </select>
+</mapper>
